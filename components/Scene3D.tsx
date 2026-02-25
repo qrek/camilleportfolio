@@ -4,13 +4,13 @@ import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment, ContactShadows } from '@react-three/drei'
 import InteractiveCube from './InteractiveCube'
-import NavigationMenu from './NavigationMenu'
 import Link from 'next/link'
 
 export default function Scene3D() {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [transitionColor, setTransitionColor] = useState('#000000')
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
 
   const handleCubeClick = (link: string, color: string) => {
     setTransitionColor(color)
@@ -18,7 +18,12 @@ export default function Scene3D() {
   }
 
   return (
-    <div className="w-full h-screen relative bg-white">
+    <main
+      className="relative min-h-screen bg-[#efefef] px-4 pb-8 pt-4 text-[#111111] md:px-8 md:pb-10"
+      onPointerMove={(event) => {
+        setCursorPosition({ x: event.clientX, y: event.clientY })
+      }}
+    >
       {/* Transition overlay */}
       {isTransitioning && (
         <div
@@ -28,70 +33,85 @@ export default function Scene3D() {
       )}
       {/* Hover label */}
       {hoveredLabel && (
-        <div className="absolute top-1/2 left-8 -translate-y-1/2 z-10 pointer-events-none">
-          <div className="text-6xl font-bold text-black opacity-20 transition-opacity duration-300">
-            {hoveredLabel}
-          </div>
+        <div
+          className="pointer-events-none fixed z-40 rounded-full bg-black px-3 py-1 text-xs font-medium uppercase tracking-[0.08em] text-white shadow-lg"
+          style={{ left: cursorPosition.x + 12, top: cursorPosition.y + 16 }}
+        >
+          {hoveredLabel}
         </div>
       )}
 
-      <Canvas
-        camera={{ position: [0, 0, 8], fov: 50 }}
-        className="bg-white cursor-pointer"
-      >
-        {/* HDRI Environment for realistic lighting */}
-        <Environment preset="city" background={false} />
+      <header className="mb-4 border-b border-black/25 pb-3 pt-1">
+        <nav className="grid grid-cols-3 items-center text-[14px] leading-none md:text-[18px]">
+          <span className="justify-self-start">Portfolio</span>
+          <span className="justify-self-center font-semibold">2026</span>
+          <Link href="/contact" className="justify-self-end hover:opacity-70 transition-opacity">
+            Contact
+          </Link>
+        </nav>
+      </header>
 
-        {/* Subtle ambient light */}
-        <ambientLight intensity={0.6} />
+      <section className="relative mb-4 h-[58vh] min-h-[360px] w-full md:h-[70vh] md:min-h-[620px]">
+        <Canvas
+          camera={{ position: [0, 0.1, 8.2], fov: 46 }}
+          className="cursor-pointer"
+        >
+          <Environment preset="city" background={false} />
+          <ambientLight intensity={0.6} />
+          <ContactShadows
+            position={[0, -1.85, 0]}
+            opacity={0.35}
+            scale={15}
+            blur={2.2}
+            far={4}
+          />
 
-        {/* Contact shadows for soft realistic shadows */}
-        <ContactShadows
-          position={[0, -1.99, 0]}
-          opacity={0.4}
-          scale={15}
-          blur={2}
-          far={4}
-        />
+          <InteractiveCube
+            position={[-3, 0, 0]}
+            color="#11196b"
+            link="/projects"
+            label="Projets"
+            onHoverChange={setHoveredLabel}
+            onCubeClick={handleCubeClick}
+            rotationSpeed={[0.001, 0, 0.0008]}
+          />
 
-        {/* Cube C - Left - Rotation on X and Z */}
-        <InteractiveCube
-          position={[-3, 0, 0]}
-          color="#11196b"
-          link="/projects"
-          label="Projets"
-          onHoverChange={setHoveredLabel}
-          onCubeClick={handleCubeClick}
-          rotationSpeed={[0.001, 0, 0.0008]}
-        />
+          <InteractiveCube
+            position={[0, 0, 0]}
+            color="#11196b"
+            link="/contact"
+            label="Contact"
+            onHoverChange={setHoveredLabel}
+            onCubeClick={handleCubeClick}
+            rotationSpeed={[0.0007, 0.001, 0]}
+          />
 
-        {/* Cube A - Center - Rotation on Y and X */}
-        <InteractiveCube
-          position={[0, 0, 0]}
-          color="#11196b"
-          link="/contact"
-          label="Contact"
-          onHoverChange={setHoveredLabel}
-          onCubeClick={handleCubeClick}
-          rotationSpeed={[0.0007, 0.001, 0]}
-        />
+          <InteractiveCube
+            position={[3, 0, 0]}
+            color="#11196b"
+            link="/about"
+            label="A propos"
+            onHoverChange={setHoveredLabel}
+            onCubeClick={handleCubeClick}
+            rotationSpeed={[0, 0.001, 0.0009]}
+          />
 
-        {/* Cube M - Right - Rotation on Y and Z */}
-        <InteractiveCube
-          position={[3, 0, 0]}
-          color="#11196b"
-          link="/about"
-          label="À propos"
-          onHoverChange={setHoveredLabel}
-          onCubeClick={handleCubeClick}
-          rotationSpeed={[0, 0.001, 0.0009]}
-        />
+          <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
+        </Canvas>
+      </section>
 
-        <OrbitControls enableZoom={false} enablePan={false} />
-      </Canvas>
-
-      {/* Navigation menu bottom right */}
-      <NavigationMenu />
-    </div>
+      <section className="mt-6 border-t border-black/25 pt-6 md:mt-10 md:pt-8">
+        <div className="grid gap-6 md:grid-cols-[1fr_1fr] md:gap-10">
+          <h1 className="text-5xl font-bold uppercase leading-none tracking-tight md:text-8xl">
+            Portfolio
+          </h1>
+          <p className="max-w-[22ch] text-xl leading-[1.15] md:max-w-none md:text-[25px] md:leading-[1.05]">
+            Camille Ameline de Cadeville. Directrice artistique et motion designer, basee a Paris,
+            specialisee dans le developpement d&apos;identites de marque et dans la creation de
+            contenus visuels et digitaux.
+          </p>
+        </div>
+      </section>
+    </main>
   )
 }

@@ -1,14 +1,23 @@
 import { createClient } from 'next-sanity'
 import { createImageUrlBuilder } from '@sanity/image-url'
 
+const rawProjectId =
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? process.env.SANITY_STUDIO_PROJECT_ID
+const dataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET ??
+  process.env.SANITY_STUDIO_DATASET ??
+  'production'
+const projectIdPattern = /^[a-z0-9-]+$/
+const isValidProjectId = Boolean(rawProjectId && projectIdPattern.test(rawProjectId))
+const projectId = isValidProjectId ? rawProjectId : 'placeholder-id'
+
 export const isSanityConfigured = () => {
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-  return projectId && projectId !== 'placeholder-id' && projectId !== 'your_project_id'
+  return isValidProjectId
 }
 
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'placeholder-id',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId,
+  dataset,
   apiVersion: '2024-01-01',
   useCdn: process.env.NODE_ENV === 'production',
 })

@@ -73,7 +73,7 @@ export default function InteractiveCube({
   return (
     <RoundedBox
       ref={meshRef}
-      args={[2.2, 2.2, 2.2]}
+      args={[2.6, 2.6, 2.6]}
       radius={0.15}
       smoothness={4}
       position={position}
