@@ -2,7 +2,6 @@ import { client, urlFor, isSanityConfigured } from '@/lib/sanity'
 import { Project } from '@/lib/sanity'
 import Image from 'next/image'
 import Link from 'next/link'
-import { PortableText } from '@portabletext/react'
 import { notFound } from 'next/navigation'
 
 async function getProject(slug: string): Promise<Project | null> {
@@ -69,103 +68,98 @@ export default async function ProjectPage({
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <main className="container mx-auto px-4 py-16">
+    <div className="min-h-screen bg-[#efefef]">
+      <main className="w-full px-2 py-4 md:px-3 md:py-5">
         <Link
-          href="/"
-          className="inline-block mb-8 text-gray-600 hover:text-gray-900 transition-colors"
+          href="/projects"
+          className="mb-4 inline-block text-sm text-black/70 transition-opacity hover:opacity-60"
         >
           ← Retour aux projets
         </Link>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              {project.title}
-            </h1>
-
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6">
-              {project.category && (
-                <span className="px-3 py-1 bg-gray-100 rounded-full">
-                  {project.category}
-                </span>
-              )}
-              {project.year && (
-                <span className="px-3 py-1 bg-gray-100 rounded-full">
-                  {project.year}
-                </span>
-              )}
-              {project.client && (
-                <span className="px-3 py-1 bg-gray-100 rounded-full">
-                  Client: {project.client}
-                </span>
-              )}
-            </div>
-
-            {project.link && (
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                Voir le projet →
-              </a>
+        <article>
+          <section className="relative mb-2 w-full overflow-hidden rounded-xl bg-[#cfcfcf]">
+            {project.mainImage ? (
+              <div className="relative aspect-[16/7] min-h-[280px] w-full md:min-h-[520px]">
+                <Image
+                  src={urlFor(project.mainImage).width(2400).height(1200).url()}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="aspect-[16/7] min-h-[280px] w-full md:min-h-[520px]" />
             )}
-          </div>
+          </section>
 
-          {project.mainImage && (
-            <div className="relative w-full aspect-video mb-12 rounded-lg overflow-hidden">
-              <Image
-                src={urlFor(project.mainImage).width(1200).height(675).url()}
-                alt={project.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          )}
+          <section className="border-t border-black/25 pt-4 md:pt-5">
+            <div className="grid gap-4 md:grid-cols-[1fr_1.2fr_1.8fr] md:gap-6">
+              <h1 className="text-3xl font-medium leading-none tracking-tight md:text-5xl">
+                {project.title}
+              </h1>
 
-          {project.description && (
-            <div className="prose prose-lg max-w-none mb-12">
-              <PortableText value={project.description} />
-            </div>
-          )}
-
-          {project.technologies && project.technologies.length > 0 && (
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-4">Technologies utilisées</h2>
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech, index) => (
+              <div className="flex flex-wrap content-start gap-2">
+                {project.category && (
+                  <span className="rounded-full border border-black/20 bg-white/40 px-3 py-1 text-xs">
+                    {project.category}
+                  </span>
+                )}
+                {project.year && (
+                  <span className="rounded-full border border-black/20 bg-white/40 px-3 py-1 text-xs">
+                    {project.year}
+                  </span>
+                )}
+                {project.client && (
+                  <span className="rounded-full border border-black/20 bg-white/40 px-3 py-1 text-xs">
+                    {project.client}
+                  </span>
+                )}
+                {project.technologies?.map((tech) => (
                   <span
-                    key={index}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm"
+                    key={tech}
+                    className="rounded-full border border-black/20 bg-white/40 px-3 py-1 text-xs"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
-            </div>
-          )}
 
-          {project.gallery && project.gallery.length > 0 && (
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Galerie</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {project.gallery.map((image, index) => (
-                  <div key={index} className="relative w-full aspect-video rounded-lg overflow-hidden">
-                    <Image
-                      src={urlFor(image).width(800).height(600).url()}
-                      alt={`${project.title} - Image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
+              <div className="space-y-3 text-base leading-relaxed text-black/80 md:text-[27px] md:leading-[1.1]">
+                <p>
+                  {project.excerpt ||
+                    'Projet de direction artistique et de design visuel developpe autour d\'une identite forte, pensee pour des supports print et digitaux.'}
+                </p>
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-sm font-medium uppercase tracking-[0.08em] text-black underline underline-offset-4"
+                  >
+                    Voir le projet
+                  </a>
+                )}
               </div>
             </div>
+          </section>
+
+          {project.gallery && project.gallery.length > 0 && (
+            <section className="mt-6 grid grid-cols-1 gap-2 md:grid-cols-2">
+              {project.gallery.map((image, index) => (
+                <div key={index} className="relative aspect-[16/10] w-full overflow-hidden rounded-xl">
+                  <Image
+                    src={urlFor(image).width(1400).height(900).url()}
+                    alt={`${project.title} - image ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </section>
           )}
-        </div>
+        </article>
       </main>
     </div>
   )
