@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+
+  /* couleurs sémantiques — format R G B pour le support <alpha-value> de Tailwind */
+  --color-bg: 255 255 255;
+  --color-fg: 17 17 17;
+  --color-muted: 115 115 115;
+  --color-accent: 99 102 241;
+  --color-border: 229 229 229;
+
+  /* rayons */
+  --radius: 0.75rem;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-fg antialiased;
+  }
+}
