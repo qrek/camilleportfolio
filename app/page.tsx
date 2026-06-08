@@ -2,18 +2,25 @@ import { SiteHeader } from "@/components/sections/SiteHeader";
 import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
 import { About } from "@/components/sections/About";
-import { Contact } from "@/components/sections/Contact";
+import { SiteFooter } from "@/components/sections/SiteFooter";
+import { Loader } from "@/components/ui/Loader";
+import { Reveal } from "@/components/ui/Reveal";
 
 export default function Home() {
   return (
     <>
+      <Loader />
       <SiteHeader />
       <main>
         <Hero />
         <Projects />
-        <About />
+        <Reveal>
+          <About />
+        </Reveal>
       </main>
-      <Contact />
+      <Reveal>
+        <SiteFooter />
+      </Reveal>
     </>
   );
 }

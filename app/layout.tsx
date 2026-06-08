@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
 // Police de repli libre — la pile (tailwind.config) place "Neue Haas Grotesk
 // Display Pro" en premier ; Inter prend le relais si elle n'est pas installée.
@@ -25,8 +26,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${serif.variable}`}>
-      <body className="font-sans">{children}</body>
+    <html
+      lang="fr"
+      className={`${inter.variable} ${serif.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="font-sans">
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('cam_loaded')==='1'){document.documentElement.classList.add('cam-skip-loader','intro-ready')}}catch(e){}",
+          }}
+        />
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   );
 }

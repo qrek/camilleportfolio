@@ -136,5 +136,6 @@ export const projects: Project[] = [
     title: "Others motion work",
     tags: ["Motion Design"],
     bg: "#551028",
+    featured: true,
   },
 ];

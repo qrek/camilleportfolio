@@ -10,6 +10,7 @@
   --color-fg: 17 17 17;
   --color-muted: 115 115 115;
   --color-accent: 99 102 241;
+  --color-royal: 45 90 245; /* bleu royal — CTA flèche (≈ blob hero) */
   --color-border: 229 229 229;
 
   /* rayons */
@@ -19,5 +20,160 @@
 @layer base {
   body {
     @apply bg-bg text-fg antialiased;
+  }
+}
+
+/* Loader d'accueil : masqué si déjà vu dans la session (anti-flash). */
+html.cam-skip-loader .loader-overlay {
+  display: none;
+}
+
+/* Textes d'intro : cachés tant que le chargement n'est pas terminé. */
+.intro-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.85s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.85s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+html.intro-ready .intro-reveal {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Smooth scroll (Lenis). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Apparition au scroll (variants : profondeur / glissement vertical). */
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal--depth {
+  transform: scale(0.9) translateY(34px);
+}
+.reveal--up {
+  transform: translateY(42px);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* "What i do" : liste de compétences animée (cascade à l'apparition +
+   couleur par item au survol). */
+.skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.skill-item {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+  opacity: 0;
+}
+
+.skills.is-visible .skill-item {
+  animation: skill-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: calc(var(--i) * 70ms);
+}
+
+@keyframes skill-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.skill-inner {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  color: var(--color-fg, #111);
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.skill-item:hover .skill-inner {
+  color: var(--c);
+  transform: translateX(8px);
+}
+
+.skill-arrow {
+  color: var(--c);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.skill-item:hover .skill-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.skill-prefix {
+  font-size: 0.6em;
+  vertical-align: super;
+}
+
+.skill-label {
+  background-image: linear-gradient(var(--c), var(--c));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 0.09em;
+  transition: background-size 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.skill-item:hover .skill-label {
+  background-size: 100% 0.09em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-item {
+    opacity: 1;
+  }
+  .skills.is-visible .skill-item {
+    animation: none;
+  }
+  .skill-inner,
+  .skill-arrow,
+  .skill-label {
+    transition: none;
   }
 }

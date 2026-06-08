@@ -11,16 +11,22 @@ export function Hero() {
         priority
         width={1526}
         height={916}
-        className="pointer-events-none absolute left-[32%] top-[-3%] h-auto w-[83%] max-w-none rotate-[15deg] select-none"
+        className="pointer-events-none absolute right-[-4%] top-[2%] h-auto w-[66%] max-w-none rotate-[15deg] select-none"
       />
 
-      <div className="relative z-10 max-w-xl pt-[46vh]">
-        <h1 className="font-serif text-[28px] font-normal italic leading-[0.88] text-black sm:text-[34px]">
-          Camille Ameline
+      <div className="relative z-10 max-w-3xl pt-[46vh]">
+        <h1
+          className="intro-reveal font-serif text-5xl font-normal italic leading-[0.95] text-black sm:text-6xl lg:text-[64px]"
+          style={{ transitionDelay: "120ms" }}
+        >
+          Camille
           <br />
-          de Cadeville
+          Ameline de Cadeville
         </h1>
-        <p className="mt-6 max-w-md text-[16px] font-[450] leading-[1.3] text-black">
+        <p
+          className="intro-reveal mt-6 max-w-md text-[16px] font-[450] leading-[1.3] text-black"
+          style={{ transitionDelay: "260ms" }}
+        >
           Directrice artistique et motion designer, basée à Paris, spécialisée
           dans le développement d&apos;identités de marque et dans la création de
           contenus visuels et digitaux.

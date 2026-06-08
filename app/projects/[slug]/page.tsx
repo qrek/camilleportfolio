@@ -8,6 +8,7 @@ import { urlForImage } from "@/sanity/image";
 import { ProjectGallery } from "@/components/sections/ProjectGallery";
 import { SiteHeader } from "@/components/sections/SiteHeader";
 import { Tag } from "@/components/ui/Tag";
+import { Reveal } from "@/components/ui/Reveal";
 
 export async function generateStaticParams() {
   const slugs = await getProjectSlugs();
@@ -62,15 +63,17 @@ export default async function ProjectPage({
           )}
         </section>
 
-        {/* Intro : titre + description + tags */}
-        <section className="w-full px-5 py-16 sm:px-8 lg:px-20">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <h1 className="font-serif text-5xl font-normal italic leading-[0.9] sm:text-6xl">
-              {project.title}
-            </h1>
-            <div className="max-w-md">
+        {/* Intro : titre + description + tags (apparitions décalées) */}
+        <section className="w-full px-5 py-20 sm:px-8 lg:px-20">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-start">
+            <Reveal variant="up">
+              <h1 className="font-serif text-7xl font-normal italic leading-[0.9] tracking-tight sm:text-8xl md:mt-10 md:-ml-1">
+                {project.title}
+              </h1>
+            </Reveal>
+            <Reveal variant="up" delay={160} className="max-w-md md:pt-2">
               {project.description && (
-                <p className="text-[16px] font-[450] leading-[1.4] text-fg">
+                <p className="text-[15px] font-[450] leading-[1.5] text-fg">
                   {project.description}
                 </p>
               )}
@@ -85,7 +88,7 @@ export default async function ProjectPage({
                   ))}
                 </ul>
               )}
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -103,12 +106,14 @@ export default async function ProjectPage({
         )}
 
         {/* Next project */}
-        <div className="flex justify-center py-24">
-          <Link
-            href="/#work"
-            className="inline-flex items-center gap-2 font-serif text-2xl font-normal italic transition hover:opacity-60"
-          >
-            Next project <span aria-hidden>→</span>
+        <div className="flex justify-center py-28">
+          <Link href="/#work" className="group inline-flex items-center gap-2.5">
+            <span className="inline-flex h-12 items-center rounded-md border border-fg/50 px-6 text-xs font-semibold uppercase tracking-[0.15em] transition-colors group-hover:bg-fg/5">
+              Next project
+            </span>
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-royal text-lg text-white transition-opacity group-hover:opacity-90">
+              <span aria-hidden>→</span>
+            </span>
           </Link>
         </div>
       </main>

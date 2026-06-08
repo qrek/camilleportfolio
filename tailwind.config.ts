@@ -9,6 +9,7 @@ export default {
         fg: "rgb(var(--color-fg) / <alpha-value>)",
         muted: "rgb(var(--color-muted) / <alpha-value>)",
         accent: "rgb(var(--color-accent) / <alpha-value>)",
+        royal: "rgb(var(--color-royal) / <alpha-value>)",
         border: "rgb(var(--color-border) / <alpha-value>)",
       },
       borderRadius: {

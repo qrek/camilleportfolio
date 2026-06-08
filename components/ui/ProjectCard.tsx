@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { Tag } from "@/components/ui/Tag";
+import { Parallax } from "@/components/ui/Parallax";
 import type { CardProject } from "@/lib/getProjects";
 
 /**
@@ -21,13 +22,15 @@ export function ProjectCard({ project }: { project: CardProject }) {
       style={bg ? { backgroundColor: bg } : undefined}
     >
       {image && (
-        <Image
-          src={image}
-          alt={title}
-          fill
-          sizes={featured ? "100vw" : "(min-width: 768px) 50vw, 100vw"}
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-        />
+        <Parallax cover speed={0.1}>
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes={featured ? "100vw" : "(min-width: 768px) 50vw, 100vw"}
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        </Parallax>
       )}
 
       {wordmark && (
@@ -41,7 +44,10 @@ export function ProjectCard({ project }: { project: CardProject }) {
         />
       )}
 
-      <h3 className="absolute inset-x-0 top-[5.4%] z-20 text-center font-serif text-[17px] italic leading-none text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]">
+      {/* Voile dégradé en haut : garantit la lisibilité du titre blanc. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[24%] bg-gradient-to-b from-black/40 to-transparent" />
+
+      <h3 className="absolute inset-x-0 top-[5.4%] z-20 text-center font-sans text-[14px] font-normal leading-tight tracking-wide text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.45)] sm:text-[16px]">
         {title}
       </h3>
 
